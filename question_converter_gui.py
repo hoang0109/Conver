@@ -6,6 +6,14 @@ Panel trái: Bảng câu hỏi và đáp án
 Panel phải: Nội dung file gốc với highlight
 """
 
+"""
+Question Converter & Exam Mixer
+
+About:
+    Developer: Lê Huy Hoàng
+    Email: hoang0109@gmail.com
+"""
+
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox, scrolledtext
 from docx import Document
@@ -58,7 +66,7 @@ class QuestionConverterGUI:
         file_menu.add_command(label="Xuất ra file Word", command=self.export_to_word)
         file_menu.add_separator()
         file_menu.add_command(label="Thoát", command=self.root.quit)
-        
+
         # View menu
         view_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="View", menu=view_menu)
@@ -66,7 +74,12 @@ class QuestionConverterGUI:
         view_menu.add_command(label="Kiểm tra dữ liệu", command=self.check_data_quality)
         view_menu.add_separator()
         view_menu.add_command(label="🔧 Sửa số thứ tự (226a→227)", command=self.fix_question_numbers)
-        
+
+        # Help menu
+        help_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Help", menu=help_menu)
+        help_menu.add_command(label="About chương trình", command=self.show_about_dialog)
+
         # Export menu
         export_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Export", menu=export_menu)
@@ -74,6 +87,25 @@ class QuestionConverterGUI:
         export_menu.add_command(label="Xuất ra JSON", command=self.export_to_json)
         export_menu.add_command(label="Xuất ra TXT", command=self.export_to_txt)
         export_menu.add_command(label="Xuất ra XML", command=self.export_to_xml)
+
+    def show_about_dialog(self):
+        about_text = (
+            "Question Converter & Exam Mixer\n"
+            "\n"
+            "Phiên bản: 1.0\n"
+            "Ngày phát hành: 06/11/2025\n"
+            "\n"
+            "Developer: Lê Huy Hoàng\n"
+            "Email: hoang0109@gmail.com\n"
+            "\n"
+            "Chức năng:\n"
+            "- Chuyển đổi, kiểm tra, xuất câu hỏi nhiều định dạng\n"
+            "- Trộn đề thi, quản lý nhóm câu hỏi\n"
+            "- Kiểm tra lỗi dữ liệu, xuất báo cáo\n"
+            "\n"
+            "© 2025 Lê Huy Hoàng. All rights reserved."
+        )
+        messagebox.showinfo("About chương trình", about_text)
     
     def create_toolbar(self):
         """Tạo toolbar"""
@@ -2463,7 +2495,7 @@ class QuestionConverterGUI:
                 for i in range(len(self.raw_content)):
                     line = self.raw_content[i]
                     # Tìm câu hỏi >= new_num (không có chữ cái)
-                    match = re.match(r'^Câu\s+(\d+)[:\.]', line.strip())
+                    match = re.match(r'^Câu\s+(\d+)[^a-zA-Z]([:\.])', line.strip())
                     if match:
                         num = int(match.group(1))
                         if num >= new_num:
@@ -2494,10 +2526,9 @@ class QuestionConverterGUI:
         except Exception as e:
             messagebox.showerror("Lỗi", f"Có lỗi khi sửa số thứ tự:\n{str(e)}")
 
-def main():
+
+# --- MAIN ENTRY POINT ---
+if __name__ == "__main__":
     root = tk.Tk()
     app = QuestionConverterGUI(root)
     root.mainloop()
-
-if __name__ == "__main__":
-    main()

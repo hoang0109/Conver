@@ -1,4 +1,10 @@
-# Question Converter & Exam Mixer# Question Converter GUI - Giao diện chuyển đổi câu hỏi
+# Question Converter & Exam Mixer
+
+## 👤 About
+- Developer: Lê Huy Hoàng
+- Email: hoang0109@gmail.com
+
+# Question Converter GUI - Giao diện chuyển đổi câu hỏi
 
 
 
@@ -248,7 +254,7 @@ Click **🔍 Kiểm tra chất lượng** để phát hiện:<Gr> CÂU HỎI V�
 
 - Sửa trực tiếp trong panel phải- Hỗ trợ nhiều schema khác nhau
 
-- Click **🔄 Refresh** để cập nhật- Tự động nhận dạng group và question tags
+- Tự động nhận dạng group và question tags
 
 - Ví dụ:
 
