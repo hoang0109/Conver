@@ -1,0 +1,189 @@
+<Gr> Nhóm Toán học
+<CH>
+Câu 1. Kết quả của phép tính 125 + 275 là:
+A. 300
+B. 350
+*C. 400
+D. 450
+</CH>
+<CH>
+Câu 2. Chu vi hình vuông có cạnh 6cm là:
+A. 12 cm
+B. 18 cm
+*C. 24 cm
+D. 36 cm
+</CH>
+<CH>
+Câu 3. Phân số 3/4 bằng bao nhiêu phần trăm?
+A. 50%
+*B. 75%
+C. 80%
+D. 100%
+</CH>
+<CH>
+Câu 4. Một hình chữ nhật có chu vi 30cm, chiều dài 10cm. Chiều rộng là:
+*A. 5 cm
+B. 10 cm
+C. 15 cm
+D. 20 cm
+</CH>
+<CH>
+Câu 5. Kết quả của phép tính 8 × 7 là:
+A. 42
+*B. 56
+C. 64
+D. 72
+</CH>
+</Gr>
+
+<Gr> Nhóm Tiếng Anh
+<CH>
+Câu 6. Từ "beautiful" có nghĩa là:
+A. Xấu
+*B. Đẹp
+C. Tốt
+D. To
+</CH>
+<CH>
+Câu 7. Chọn câu đúng:
+A. She go to school everyday
+*B. She goes to school everyday
+C. She going to school everyday
+D. She gone to school everyday
+</CH>
+<CH>
+Câu 8. Từ trái nghĩa với "big" là:
+A. Large
+B. Huge
+*C. Small
+D. Wide
+</CH>
+<CH>
+Câu 9. "How are you?" có nghĩa là:
+A. Tên bạn là gì?
+*B. Bạn khỏe không?
+C. Bạn đi đâu?
+D. Bạn bao nhiêu tuổi?
+</CH>
+<CH>
+Câu 10. Chọn từ đúng: "I ___ a student"
+A. are
+B. be
+*C. am
+D. is
+</CH>
+</Gr>
+
+<Gr> Nhóm Lịch sử
+<CH>
+Câu 11. Việt Nam được thống nhất vào năm nào?
+A. 1945
+B. 1954
+*C. 1975
+D. 1976
+</CH>
+<CH>
+Câu 12. Thủ đô của Việt Nam là:
+A. Hồ Chí Minh
+*B. Hà Nội
+C. Đà Nẵng
+D. Huế
+</CH>
+<CH>
+Câu 13. Ngày Quốc khánh Việt Nam là:
+A. 30/4
+*B. 2/9
+C. 1/5
+D. 19/5
+</CH>
+<CH>
+Câu 14. Chủ tịch Hồ Chí Minh sinh năm nào?
+A. 1880
+*B. 1890
+C. 1900
+D. 1910
+</CH>
+<CH>
+Câu 15. Chiến thắng Điện Biên Phủ diễn ra năm:
+A. 1945
+B. 1950
+*C. 1954
+D. 1975
+</CH>
+</Gr>
+
+<Gr> Nhóm Địa lý
+<CH>
+Câu 16. Dãy núi cao nhất Việt Nam là:
+*A. Hoàng Liên Sơn
+B. Trường Sơn
+C. Bạch Mã
+D. Ngũ Hành Sơn
+</CH>
+<CH>
+Câu 17. Sông dài nhất Việt Nam là:
+A. Sông Hồng
+*B. Sông Mekong
+C. Sông Đồng Nai
+D. Sông Hương
+</CH>
+<CH>
+Câu 18. Việt Nam có bao nhiêu tỉnh thành?
+A. 58
+B. 60
+*C. 63
+D. 65
+</CH>
+<CH>
+Câu 19. Đỉnh núi cao nhất Việt Nam là:
+A. Phan Xi Păng
+*B. Phan Xi Păng
+C. Bà Đen
+D. Langbiang
+</CH>
+<CH>
+Câu 20. Hồ lớn nhất Việt Nam là:
+*A. Hồ Tây
+B. Hồ Hoàn Kiếm
+C. Hồ Ba Bể
+D. Hồ Xuân Hương
+</CH>
+</Gr>
+
+<Gr> Nhóm Khoa học
+<CH>
+Câu 21. Nước đóng băng ở nhiệt độ:
+*A. 0°C
+B. 10°C
+C. -10°C
+D. 100°C
+</CH>
+<CH>
+Câu 22. Trái đất có bao nhiêu lục địa?
+A. 5
+B. 6
+*C. 7
+D. 8
+</CH>
+<CH>
+Câu 23. Ánh sáng truyền với tốc độ:
+A. 300 m/s
+B. 3000 km/s
+*C. 300.000 km/s
+D. 3.000.000 km/s
+</CH>
+<CH>
+Câu 24. Một ngày đêm có bao nhiêu giờ?
+A. 12 giờ
+B. 20 giờ
+*C. 24 giờ
+D. 48 giờ
+</CH>
+<CH>
+Câu 25. Khí quyển trái đất chứa nhiều nhất khí nào?
+A. Oxy
+*B. Nitơ
+C. Carbon dioxide
+D. Hydro
+</CH>
+</Gr>
