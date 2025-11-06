@@ -498,14 +498,33 @@ class QuestionConverterGUI:
         self.root.update()
         
         created_exams = []
+        used_questions_global = []  # Theo dõi câu hỏi đã dùng toàn cục
+        
+        # Kiểm tra khả năng tạo đề không trùng lặp
+        min_questions_needed = num_exams * num_questions * 0.7  # Tối thiểu 70% câu khác nhau
+        if total_available < min_questions_needed:
+            overlap_warning = (
+                f"Cảnh báo: Với {total_available} câu hỏi có sẵn và {num_exams} đề x {num_questions} câu,\n"
+                f"sẽ có một ít trùng lặp giữa các đề. Để giảm trùng lặp, hãy:\n"
+                f"- Tăng số câu hỏi trong ngân hàng\n"
+                f"- Giảm số đề hoặc số câu/đề\n\n"
+                f"Tiếp tục tạo đề?"
+            )
+            if not messagebox.askyesno("Cảnh báo trùng lặp", overlap_warning):
+                return
         
         for exam_num in range(1, num_exams + 1):
-            # Tạo pool câu hỏi cho đề này
-            selected_questions = self.select_questions_for_exam(groups, num_questions, num_groups)
+            # Tạo pool câu hỏi cho đề này với ưu tiên tránh trùng lặp
+            selected_questions = self.select_questions_for_exam_smart(
+                groups, num_questions, num_groups, used_questions_global, exam_num
+            )
             
             if not selected_questions:
                 messagebox.showerror("Lỗi", f"Không thể tạo đề số {exam_num}!")
                 break
+            
+            # Thêm các câu đã chọn vào danh sách đã dùng
+            used_questions_global.extend(selected_questions)
             
             # Shuffle câu hỏi
             random.shuffle(selected_questions)
@@ -517,18 +536,134 @@ class QuestionConverterGUI:
             self.create_exam_word_file(file_path, selected_questions, exam_num)
             created_exams.append(file_name)
             
-            # Cập nhật progress
-            self.mixer_result_text.insert(tk.END, f"✅ Đã tạo: {file_name}\n")
+            # Tính toán thống kê trùng lặp
+            if exam_num > 1:
+                overlap_stats = self.calculate_overlap_stats(used_questions_global, num_questions, exam_num)
+                self.mixer_result_text.insert(tk.END, f"✅ Đã tạo: {file_name} {overlap_stats}\n")
+            else:
+                self.mixer_result_text.insert(tk.END, f"✅ Đã tạo: {file_name}\n")
             self.root.update()
         
-        # Thông báo hoàn thành
+        # Thông báo hoàn thành với thống kê trùng lặp tổng thể
+        final_overlap_report = self.generate_final_overlap_report(used_questions_global, num_questions, num_exams, total_available)
+        
         self.mixer_result_text.insert(tk.END, f"\n{'='*50}\n")
         self.mixer_result_text.insert(tk.END, f"🎉 HOÀN THÀNH!\n")
         self.mixer_result_text.insert(tk.END, f"Đã tạo {len(created_exams)} đề thi tại:\n{output_folder}\n")
+        self.mixer_result_text.insert(tk.END, f"\n📊 THỐNG KÊ TRÙNG LẶP:\n{final_overlap_report}\n")
         
         messagebox.showinfo("Thành công", 
                           f"Đã tạo {len(created_exams)} đề thi!\n\n"
-                          f"Vị trí: {output_folder}")
+                          f"Vị trí: {output_folder}\n\n"
+                          f"{final_overlap_report}")
+    
+    def select_questions_for_exam_smart(self, groups, num_questions, num_groups, used_questions_global, exam_num):
+        """Chọn câu hỏi cho một đề thi - ưu tiên tránh trùng lặp với các đề trước"""
+        import random
+        
+        selected = []
+        group_names = list(groups.keys())
+        
+        # Tạo pool câu chưa dùng hoặc ít dùng nhất theo từng group
+        available_by_group = {}
+        for group, questions in groups.items():
+            # Ưu tiên câu chưa dùng, sau đó đến câu ít dùng nhất
+            unused = [q for q in questions if q not in used_questions_global]
+            if unused:
+                available_by_group[group] = unused
+            else:
+                # Nếu hết câu chưa dùng, dùng lại câu ít được chọn nhất
+                usage_count = {}
+                for q in questions:
+                    usage_count[q['number']] = used_questions_global.count(q)
+                
+                min_usage = min(usage_count.values()) if usage_count else 0
+                least_used = [q for q in questions if usage_count.get(q['number'], 0) == min_usage]
+                available_by_group[group] = least_used
+        
+        if num_questions <= num_groups:
+            # Ít câu hơn số groups: chọn ngẫu nhiên một số groups
+            selected_groups = random.sample(group_names, num_questions)
+            for group in selected_groups:
+                if group in available_by_group and available_by_group[group]:
+                    selected.append(random.choice(available_by_group[group]))
+        else:
+            # Nhiều câu hơn số groups: phân đều
+            # Bước 1: Chọn ít nhất 1 câu từ mỗi group (ưu tiên câu chưa dùng)
+            for group in group_names:
+                if group in available_by_group and available_by_group[group]:
+                    chosen = random.choice(available_by_group[group])
+                    selected.append(chosen)
+                    # Loại bỏ câu đã chọn khỏi pool để không chọn lại trong đề này
+                    available_by_group[group].remove(chosen)
+            
+            # Bước 2: Phân đều số câu còn lại
+            remaining = num_questions - len(selected)
+            questions_per_group = remaining // num_groups
+            extra_questions = remaining % num_groups
+            
+            # Phân đều câu hỏi từ pool còn lại
+            for group in group_names:
+                if group not in available_by_group or not available_by_group[group]:
+                    continue
+                
+                # Số câu cần lấy từ group này
+                num_to_take = questions_per_group
+                if extra_questions > 0:
+                    num_to_take += 1
+                    extra_questions -= 1
+                
+                # Lấy câu (không vượt quá số câu có sẵn)
+                num_to_take = min(num_to_take, len(available_by_group[group]))
+                if num_to_take > 0:
+                    selected.extend(random.sample(available_by_group[group], num_to_take))
+                
+                if len(selected) >= num_questions:
+                    break
+        
+        return selected[:num_questions]
+    
+    def calculate_overlap_stats(self, used_questions_global, num_questions, exam_num):
+        """Tính thống kê trùng lặp cho đề hiện tại"""
+        if exam_num <= 1:
+            return ""
+        
+        current_exam_start = (exam_num - 1) * num_questions
+        current_exam_questions = used_questions_global[current_exam_start:current_exam_start + num_questions]
+        previous_questions = used_questions_global[:current_exam_start]
+        
+        # Đếm câu trùng với các đề trước
+        overlap_count = 0
+        for q in current_exam_questions:
+            if q in previous_questions:
+                overlap_count += 1
+        
+        overlap_percent = (overlap_count / num_questions) * 100
+        if overlap_count == 0:
+            return "(0% trùng lặp)"
+        else:
+            return f"({overlap_count}/{num_questions} = {overlap_percent:.1f}% trùng lặp)"
+    
+    def generate_final_overlap_report(self, used_questions_global, num_questions, num_exams, total_available):
+        """Tạo báo cáo trùng lặp tổng thể"""
+        total_used = len(used_questions_global)
+        unique_questions = len(set(q['number'] for q in used_questions_global))
+        total_overlap = total_used - unique_questions
+        
+        overlap_percent = (total_overlap / total_used) * 100 if total_used > 0 else 0
+        
+        report = f"• Tổng câu hỏi sử dụng: {total_used}\n"
+        report += f"• Câu hỏi duy nhất: {unique_questions}/{total_available}\n"
+        report += f"• Tổng lần trùng lặp: {total_overlap} ({overlap_percent:.1f}%)\n"
+        
+        if overlap_percent < 10:
+            report += "• 🟢 Rất tốt - Ít trùng lặp"
+        elif overlap_percent < 25:
+            report += "• 🟡 Khá tốt - Trùng lặp vừa phải"
+        else:
+            report += "• 🔴 Cần cải thiện - Nhiều trùng lặp"
+        
+        return report
     
     def select_questions_for_exam(self, groups, num_questions, num_groups):
         """Chọn câu hỏi cho một đề thi - phân đều từ các groups"""
